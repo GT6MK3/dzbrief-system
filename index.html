@@ -3,264 +3,1031 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commando Skydivers Annual DZ Brief</title>
+    <title>Commando Skydivers - Annual DZ Brief</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen py-8 px-4">
+<body class="bg-gray-100 min-h-screen flex flex-col justify-between">
+    <div class="container mx-auto max-w-2xl p-4 mt-6">
+        <div class="flex rounded-lg overflow-hidden border border-gray-200 mb-4 bg-white shadow-sm text-xs sm:text-sm">
+            <button type="button" id="tabSkydiver" class="flex-1 py-2 font-semibold bg-red-600 text-white">Submit Brief</button>
+            <button type="button" id="tabAdmin" class="flex-1 py-2 font-semibold text-gray-700 hover:bg-gray-50">DZSO Review</button>
+            <button type="button" id="tabManifest" class="flex-1 py-2 font-semibold text-gray-700 hover:bg-gray-50">Manifest</button>
+        </div>
 
-    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg border border-slate-100 p-6">
-        
-        <div class="mb-8 border-b border-slate-100 pb-4">
-            <div class="flex justify-between items-center text-xs font-semibold tracking-wider text-slate-400 uppercase">
-                <span>Form: CSD-SAF-COM-FRM-001-1</span>
-                <span class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Tag: #dzbrief</span>
+        <!-- Skydiver form -->
+        <div id="skydiverView" class="bg-white shadow-md rounded p-4">
+            <h1 class="text-2xl font-bold text-center text-red-600 mb-2">Annual DZ Briefing Form</h1>
+            <p class="text-center text-xs text-gray-500 mb-6">Spec v0.2</p>
+            <form id="briefForm" class="space-y-6">
+                <fieldset class="space-y-3 border-b pb-4">
+                    <legend class="text-sm font-bold text-gray-800">Briefing Officer</legend>
+                    <div>
+                        <label for="dzsoSelect" class="block text-sm font-medium text-gray-700">Active DZSO</label>
+                        <select id="dzsoSelect" required class="mt-1 block w-full rounded-md border border-gray-300 p-2 bg-white focus:border-red-500 focus:ring-red-500"></select>
+                    </div>
+                </fieldset>
+
+                <fieldset class="space-y-3 border-b pb-4">
+                    <legend class="text-sm font-bold text-gray-800">Personal Details</legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="sm:col-span-2">
+                            <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="fullName" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="licenseNumber" class="block text-sm font-medium text-gray-700">APF License Number</label>
+                            <input type="text" id="licenseNumber" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                            <input type="date" id="dateOfBirth" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                            <input type="text" id="address" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="tel" id="phone" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="nextOfKinName" class="block text-sm font-medium text-gray-700">Next of Kin — Name</label>
+                            <input type="text" id="nextOfKinName" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="nextOfKinPhone" class="block text-sm font-medium text-gray-700">Next of Kin — Phone</label>
+                            <input type="tel" id="nextOfKinPhone" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="space-y-3 border-b pb-4">
+                    <legend class="text-sm font-bold text-gray-800">Jump Experience</legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label for="jumpCount" class="block text-sm font-medium text-gray-700">Jump Count</label>
+                            <input type="number" id="jumpCount" min="0" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="lastJumpDate" class="block text-sm font-medium text-gray-700">Last Jump Date</label>
+                            <input type="date" id="lastJumpDate" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="verifiedWeight" class="block text-sm font-medium text-gray-700">Verified Weight (kg)</label>
+                            <input type="number" id="verifiedWeight" min="1" step="0.1" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="space-y-3 border-b pb-4">
+                    <legend class="text-sm font-bold text-gray-800">Equipment — Rigs (up to 3)</legend>
+                    <div id="rigsContainer" class="space-y-4"></div>
+                    <button type="button" id="addRigBtn" class="text-sm text-red-600 font-medium hover:underline">+ Add Rig</button>
+                </fieldset>
+
+                <fieldset class="space-y-3 border-b pb-4">
+                    <legend class="text-sm font-bold text-gray-800">Gear Documentation Photos</legend>
+                    <p class="text-xs text-gray-500">Gear photos are compressed on-device to JPEG (max 1200px). Jumper and DZSO signatures remain lossless PNG. Maximum 9 gear photos per submission.</p>
+                    <p id="photoCountLabel" class="text-xs font-medium text-gray-700">0 / 9 photos selected</p>
+                    <p id="photoCompressStatus" class="hidden text-xs text-gray-500"></p>
+                    <div id="rigPhotosContainer" class="space-y-3"></div>
+                </fieldset>
+
+                <fieldset class="space-y-3 border-b pb-4">
+                    <legend class="text-sm font-bold text-gray-800">Rules &amp; Signature</legend>
+                    <div class="border p-4 bg-gray-50 rounded h-36 overflow-y-auto text-sm text-gray-600">
+                        <p class="font-bold mb-2">Dropzone Rules &amp; Safety Regulations:</p>
+                        <p>1. Always check the windsock before boarding and before landing.</p>
+                        <p>2. The standard landing pattern is left-hand unless specified by the CI.</p>
+                        <p>3. No landing inside the student area unless an emergency occurs.</p>
+                        <p>4. Ensure your gear check is completed before walking to the aircraft.</p>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="agreeRules" required class="h-4 w-4 text-red-600 border-gray-300 rounded">
+                        <label for="agreeRules" class="ml-2 text-sm text-gray-900">I have read and agree to follow all DZ rules.</label>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Jumper Signature</label>
+                        <canvas id="signature-canvas" class="w-full h-36 border bg-white rounded touch-none"></canvas>
+                        <button type="button" id="clear" class="mt-2 text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">Clear Signature</button>
+                    </div>
+                </fieldset>
+
+                <p id="formStatus" class="hidden text-sm text-center rounded p-2" role="status" aria-live="polite"></p>
+                <button type="submit" id="submitBtn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 disabled:opacity-50">Submit Briefing</button>
+            </form>
+        </div>
+
+        <!-- DZSO admin panel -->
+        <div id="adminView" class="hidden bg-white shadow-md rounded p-4">
+            <h1 class="text-2xl font-bold text-center text-red-600 mb-2">DZSO Review Panel</h1>
+            <p class="text-center text-sm text-gray-500 mb-4">Validate jumper details before approval.</p>
+            <div class="mb-4">
+                <label for="adminDzsoSelect" class="block text-sm font-medium text-gray-700">Reviewing as</label>
+                <select id="adminDzsoSelect" class="mt-1 block w-full rounded-md border border-gray-300 p-2 bg-white"></select>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900 mt-1">Annual DZ Briefing Manifest</h1>
-            <p class="text-sm text-slate-500">Latrobe Valley Airfield — Season 2026</p>
-            
-            <div class="w-full bg-slate-100 h-1.5 mt-4 rounded-full overflow-hidden">
-                <div id="progressBar" class="bg-blue-600 h-full transition-all duration-300" style="width: 20%;"></div>
+            <p id="adminStatus" class="hidden text-sm text-center rounded p-2 mb-4" role="status"></p>
+            <div id="submissionList" class="space-y-3">
+                <p class="text-sm text-gray-500 text-center py-6">Select a DZSO to load submissions.</p>
             </div>
         </div>
 
-        <form id="wizardForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-            
-            <div id="step1" class="step-pane space-y-4">
-                <h2 class="text-lg font-bold text-slate-900">Step 1: APF Identity Verification</h2>
-                <p class="text-sm text-slate-500">Enter your official Australian Parachute Federation membership sequence number to extract licensing matrices and active database waivers securely.</p>
-                
-                <div class="flex gap-2">
-                    <input type="text" id="apfNumber" placeholder="e.g., 123456" class="flex-1 p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <button type="button" onclick="runApfLookup()" class="bg-slate-900 hover:bg-slate-800 text-white px-5 rounded-lg font-medium text-sm transition">Lookup</button>
+        <!-- Manifest lookup -->
+        <div id="manifestView" class="hidden bg-white shadow-md rounded p-4">
+            <h1 class="text-2xl font-bold text-center text-red-600 mb-2">Manifest / DZSO Lookup</h1>
+            <p class="text-center text-sm text-gray-500 mb-4">Search by APF license or name for the current brief year.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <div class="sm:col-span-2">
+                    <label for="manifestSearch" class="block text-sm font-medium text-gray-700">Search</label>
+                    <input type="search" id="manifestSearch" placeholder="License number or full name…" class="mt-1 w-full border rounded p-2">
                 </div>
-
-                <div id="apiResultBox" class="hidden p-4 rounded-lg border flex gap-3 bg-emerald-50 border-emerald-200 text-emerald-900">
-                    <div>
-                        <h3 class="font-bold text-sm">System Verification: <span id="lightBadge" class="uppercase bg-emerald-600 text-white px-1.5 py-0.5 rounded text-xs ml-1">GREEN</span></h3>
-                        <p class="text-xs mt-1"><strong>Authenticated Name:</strong> <span id="apiName">John Doe</span> | <strong id="apiCert">Certificate C</strong></p>
-                        <p class="text-xs"><strong>Licensing/Waivers Status:</strong> Verified National Register & Signed CASA Flight Notice Block.</p>
-                    </div>
-                </div>
-
-                <div class="flex justify-end pt-4">
-                    <button type="button" id="step1Next" disabled onclick="changeStep(2)" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition disabled:bg-slate-200 disabled:text-slate-400">Continue →</button>
-                </div>
-            </div>
-
-            <div id="step2" class="step-pane hidden space-y-4">
-                <h2 class="text-lg font-bold text-slate-900">Step 2: Personal Profile Mapping</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Full Name (APF Secure Sync)</label>
-                        <input type="text" id="profileName" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 cursor-not-allowed outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">License Level Rating</label>
-                        <input type="text" id="profileCert" readonly class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 cursor-not-allowed outline-none">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Residential Address</label>
-                        <input type="text" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Mobile Contact Phone</label>
-                        <input type="tel" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Email Address Address</label>
-                        <input type="email" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Total Lifetime Jumps</label>
-                        <input type="number" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Date of Last Jump Event</label>
-                        <input type="date" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Next of Kin Name</label>
-                        <input type="text" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1">Next of Kin Contact Phone</label>
-                        <input type="tel" required class="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-                </div>
-
-                <div class="flex justify-between pt-4">
-                    <button type="button" onclick="changeStep(1)" class="text-slate-500 hover:text-slate-800 text-sm font-semibold">← Back</button>
-                    <button type="button" onclick="changeStep(3)" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition">Continue →</button>
-                </div>
-            </div>
-
-            <div id="step3" class="step-pane hidden space-y-4">
-                <h2 class="text-lg font-bold text-slate-900">Step 3: On-Site Scale Weight Metric</h2>
-                <p class="text-sm text-slate-500">Step onto the baseline digital platform scales situated inside the primary hangar complex wearing complete street clothing configuration. Declare the result below.</p>
-                
-                <div class="max-w-xs">
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Registered Weight (kg)</label>
-                    <div class="relative">
-                        <input type="number" id="weightField" required placeholder="e.g., 82" class="w-full p-2.5 pr-12 border border-slate-200 rounded-lg text-lg font-bold outline-none focus:ring-2 focus:ring-blue-500">
-                        <span class="absolute right-3 top-3 text-sm font-bold text-slate-400">KG</span>
-                    </div>
-                </div>
-
-                <div class="border-l-4 border-amber-500 bg-amber-50 p-3 rounded text-xs text-amber-900">
-                    <strong>Airfield Regulation Note:</strong> The safety inspector tracking your dispatch parameters matches this specific payload declaration against physical balances prior to log off.
-                </div>
-
-                <div class="flex justify-between pt-4">
-                    <button type="button" onclick="changeStep(2)" class="text-slate-500 hover:text-slate-800 text-sm font-semibold">← Back</button>
-                    <button type="button" onclick="validateWeightAndMove()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition">Continue →</button>
-                </div>
-            </div>
-
-            <div id="step4" class="step-pane hidden space-y-6">
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900">Step 4: Operational System Rig Assembly</h2>
-                    <p class="text-xs text-slate-500">Declare active component deployment fields. Upload crisp smartphone frame captures showing legal status markings.</p>
-                </div>
-
-                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
-                    <h3 class="font-bold text-xs text-slate-800 tracking-wide uppercase">PARACHUTE RIG ARCHITECTURE #1</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500">Main Canopy Fabric Model</label>
-                            <input type="text" required placeholder="e.g., Sabre 3" class="w-full p-2 bg-white border border-slate-200 rounded outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500">Main Square Area Size (sq ft)</label>
-                            <input type="number" required placeholder="150" class="w-full p-2 bg-white border border-slate-200 rounded outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500">Reserve Parachute System</label>
-                            <input type="text" required placeholder="e.g., OP-143" class="w-full p-2 bg-white border border-slate-200 rounded outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500">Reserve Safe Packing Repack Due Date</label>
-                            <input type="date" required class="w-full p-2 bg-white border border-slate-200 rounded outline-none text-xs">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">1. Main Form Approval Photo</label>
-                            <input type="file" accept="image/*" required class="text-xs w-full block">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">2. Rig Reserve Card Scan</label>
-                            <input type="file" accept="image/*" required class="text-xs w-full block">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">3. Fully Assembled Assembly Capture</label>
-                            <input type="file" accept="image/*" required class="text-xs w-full block">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between pt-4">
-                    <button type="button" onclick="changeStep(3)" class="text-slate-500 hover:text-slate-800 text-sm font-semibold">← Back</button>
-                    <button type="button" onclick="changeStep(5)" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition">Continue →</button>
+                    <label for="manifestYear" class="block text-sm font-medium text-gray-700">Brief Year</label>
+                    <input type="number" id="manifestYear" class="mt-1 w-full border rounded p-2">
                 </div>
             </div>
-
-            <div id="step5" class="step-pane hidden space-y-6">
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900">Step 5: Signature Executions & Routing</h2>
-                    <p class="text-sm text-slate-500">Designate the physical inspector roster profile on site to trigger secure authorization loops.</p>
-                </div>
-
-                <div class="max-w-xs">
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Active Duty Drop Zone Safety Officer (DZSO)</label>
-                    <select id="dzsoSelector" required class="w-full p-2.5 border border-slate-200 bg-white rounded-lg outline-none text-sm">
-                        <option value="">-- Select Active Officer --</option>
-                        <option value="Ben Harrison">Ben Harrison</option>
-                        <option value="Sarah Jenkins">Sarah Jenkins</option>
-                        <option value="Dave Miller">Dave Miller</option>
-                        <option value="Mick Flynn">Mick Flynn</option>
-                    </select>
-                </div>
-
-                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
-                    <h3 class="font-bold text-xs tracking-wider text-slate-400 uppercase">Jumper Legal Accountability Affirmation</h3>
-                    <p class="text-xs text-slate-600 italic leading-relaxed">
-                        "I have been briefed by the DZSO and believe I am ready to jump at the Latrobe Valley Airfield Drop Zone. My licences are in date, my equipment is airworthy and I agree to abide by all APF and Commando Skydivers Rules & Regulations."
-                    </p>
-                    
-                    <div class="bg-white border border-slate-200 rounded-lg p-2 mt-2">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Execute Handwritten Signature Trace in Frame Boundary:</label>
-                        <div class="border border-slate-100 bg-slate-50 rounded">
-                            <canvas id="signatureCanvas" class="w-full h-32 border border-dashed border-slate-200 bg-white rounded"></canvas>
-                        </div>
-                        <div class="flex justify-end gap-2 mt-1">
-                            <button type="button" onclick="clearPadCanvas()" class="text-xs text-slate-500 font-medium hover:text-slate-900 px-2 py-1">Reset Trace</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between pt-4">
-                    <button type="button" onclick="changeStep(4)" class="text-slate-500 hover:text-slate-800 text-sm font-semibold">← Back</button>
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-lg text-sm font-bold tracking-wide shadow transition">Submit Electronic Brief</button>
-                </div>
+            <div id="manifestResults" class="space-y-3">
+                <p class="text-sm text-gray-500 text-center py-6">Type to search manifest records.</p>
             </div>
-
-        </form>
+        </div>
     </div>
 
+    <!-- Disapprove modal -->
+    <div id="disapproveModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-lg font-bold mb-2">Disapprove Briefing</h2>
+            <p class="text-sm text-gray-600 mb-3">A reason is required so the jumper knows what to correct.</p>
+            <textarea id="rejectionReason" rows="4" placeholder="Enter rejection reason…" class="w-full border rounded p-2 text-sm"></textarea>
+            <div class="flex gap-2 mt-4">
+                <button type="button" id="cancelDisapprove" class="flex-1 py-2 rounded border text-sm">Cancel</button>
+                <button type="button" id="confirmDisapprove" class="flex-1 py-2 rounded bg-red-600 text-white text-sm">Confirm Disapproval</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approve modal (DZSO gatekeeping) -->
+    <div id="approveModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-lg w-full p-4 max-h-[90vh] overflow-y-auto">
+            <h2 class="text-lg font-bold mb-2">Approve Briefing</h2>
+            <p id="approveSummary" class="text-sm text-gray-600 mb-3"></p>
+            <div class="space-y-2 mb-4 text-sm">
+                <label class="flex items-start gap-2">
+                    <input type="checkbox" id="valWeight" class="mt-1 h-4 w-4 text-red-600">
+                    <span>I have checked the jumper's weight is correct</span>
+                </label>
+                <label class="flex items-start gap-2">
+                    <input type="checkbox" id="valEquipment" class="mt-1 h-4 w-4 text-red-600">
+                    <span>I have checked that the jumper's equipment listed on the form is airworthy</span>
+                </label>
+                <label class="flex items-start gap-2">
+                    <input type="checkbox" id="valCredentials" class="mt-1 h-4 w-4 text-red-600">
+                    <span>I have checked that the jumper's credentials are correct</span>
+                </label>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">DZSO Signature</label>
+                <canvas id="dzso-signature-canvas" class="w-full h-32 border bg-white rounded touch-none"></canvas>
+                <button type="button" id="clearDzsoSig" class="mt-2 text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">Clear DZSO Signature</button>
+            </div>
+            <div class="flex gap-2">
+                <button type="button" id="cancelApprove" class="flex-1 py-2 rounded border text-sm">Cancel</button>
+                <button type="button" id="confirmApprove" disabled class="flex-1 py-2 rounded bg-green-600 text-white text-sm disabled:opacity-50 disabled:cursor-not-allowed">Confirm Approval</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF receipt template -->
+    <div id="pdfReceipt" class="fixed left-[-9999px] top-0 w-[210mm] bg-white text-gray-900 p-8 text-sm" aria-hidden="true">
+        <div class="border-b-2 border-red-600 pb-4 mb-4">
+            <h1 class="text-xl font-bold text-red-600">Commando Skydivers</h1>
+            <p class="text-base font-semibold">Annual DZ Briefing Receipt</p>
+            <p id="pdfYear" class="text-xs text-gray-500 mt-1"></p>
+        </div>
+        <table class="w-full mb-4 text-sm">
+            <tr><td class="py-1 font-medium w-44">Full Name</td><td id="pdfName"></td></tr>
+            <tr><td class="py-1 font-medium">APF License</td><td id="pdfLicense"></td></tr>
+            <tr><td class="py-1 font-medium">DZSO</td><td id="pdfDzso"></td></tr>
+            <tr><td class="py-1 font-medium">Weight (kg)</td><td id="pdfWeight"></td></tr>
+            <tr><td class="py-1 font-medium">Submitted</td><td id="pdfSubmitted"></td></tr>
+            <tr><td class="py-1 font-medium">Status</td><td id="pdfStatus"></td></tr>
+            <tr id="pdfRejectionRow" class="hidden"><td class="py-1 font-medium align-top">Rejection Reason</td><td id="pdfRejection"></td></tr>
+        </table>
+        <p class="font-medium mb-2">Jumper Signature</p>
+        <div class="border rounded p-2 h-32 flex items-center justify-center bg-white mb-4">
+            <img id="pdfSignature" alt="" class="max-h-28 max-w-full object-contain" crossorigin="anonymous">
+        </div>
+        <p class="text-xs text-gray-500">Commando Skydivers Ecosystem • #dzbrief v0.2</p>
+    </div>
+
+    <footer class="text-center p-4 text-xs text-gray-500">Commando Skydivers Ecosystem • #dzbrief v0.2</footer>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        let currentStep = 1;
-        let padInstance;
+    document.addEventListener('DOMContentLoaded', function () {
+        var BRIEF_YEAR = new Date().getFullYear();
+        var MAX_RIGS = 3;
+        var MAX_PHOTOS = 9;
+        var PHOTO_MAX_DIM = 1200;
+        var PHOTO_JPEG_QUALITY = 0.7;
+        var photosCompressing = 0;
+        var STATUS = { PENDING: 'pending', APPROVED: 'approved', DISAPPROVED: 'disapproved' };
+        var configMissing = !window.SUPABASE_URL || !window.SUPABASE_ANON_KEY ||
+            window.SUPABASE_URL.indexOf('your-project-ref') !== -1 ||
+            window.SUPABASE_ANON_KEY === 'your-anon-key-here';
+        var supabase = configMissing ? null : window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+        var sessionReady = false;
 
-        // Form Tracking Progress Calculations
-        function changeStep(targetStep) {
-            document.querySelectorAll('.step-pane').forEach(el => el.classList.add('hidden'));
-            document.getElementById('step' + targetStep).classList.remove('hidden');
-            document.getElementById('progressBar').style.width = (targetStep / 5) * 100 + '%';
-            currentStep = targetStep;
+        function ensureSession() {
+            if (configMissing) return Promise.resolve(null);
+            return supabase.auth.getSession().then(function (result) {
+                if (result.data.session) {
+                    sessionReady = true;
+                    return result.data.session;
+                }
+                return supabase.auth.signInAnonymously().then(function (authResult) {
+                    if (authResult.error) throw authResult.error;
+                    sessionReady = true;
+                    return authResult.data.session;
+                });
+            });
+        }
 
-            // Initialize touchscreen trace controller frame components inside target signature frame blocks dynamically
-            if (targetStep === 5 && !padInstance) {
-                setTimeout(() => {
-                    const canvasElement = document.getElementById('signatureCanvas');
-                    // Canvas auto scaling fix bounds width
-                    canvasElement.width = canvasElement.offsetWidth;
-                    canvasElement.height = 128;
-                    padInstance = new SignaturePad(canvasElement);
-                }, 100);
+        var dzsoMap = {};
+        var pendingDisapproveId = null;
+        var pendingApproveId = null;
+        var manifestTimer = null;
+        var dzsoSignaturePad = null;
+
+        var els = {
+            form: document.getElementById('briefForm'),
+            submitBtn: document.getElementById('submitBtn'),
+            formStatus: document.getElementById('formStatus'),
+            dzsoSelect: document.getElementById('dzsoSelect'),
+            adminDzsoSelect: document.getElementById('adminDzsoSelect'),
+            submissionList: document.getElementById('submissionList'),
+            adminStatus: document.getElementById('adminStatus'),
+            rigsContainer: document.getElementById('rigsContainer'),
+            rigPhotosContainer: document.getElementById('rigPhotosContainer'),
+            photoCountLabel: document.getElementById('photoCountLabel'),
+            photoCompressStatus: document.getElementById('photoCompressStatus'),
+            manifestSearch: document.getElementById('manifestSearch'),
+            manifestYear: document.getElementById('manifestYear'),
+            manifestResults: document.getElementById('manifestResults')
+        };
+
+        els.manifestYear.value = BRIEF_YEAR;
+
+        function showBanner(el, message, type) {
+            el.textContent = message;
+            el.classList.remove('hidden', 'text-red-700', 'bg-red-50', 'text-green-700', 'bg-green-50', 'text-gray-700', 'bg-gray-50');
+            el.classList.add(type === 'error' ? 'text-red-700 bg-red-50' : type === 'success' ? 'text-green-700 bg-green-50' : 'text-gray-700 bg-gray-50');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function formatDate(iso) {
+            return iso ? new Date(iso).toLocaleString() : '—';
+        }
+
+        function formatDateOnly(iso) {
+            return iso ? new Date(iso + 'T00:00:00').toLocaleDateString() : '—';
+        }
+
+        function dataURLToBlob(dataURL) {
+            var parts = dataURL.split(',');
+            var mime = parts[0].match(/:(.*?);/)[1];
+            var binary = atob(parts[1]);
+            var bytes = new Uint8Array(binary.length);
+            for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return new Blob([bytes], { type: mime });
+        }
+
+        function manifestBadge(status, rejectionReason) {
+            if (status === STATUS.APPROVED) {
+                return '<span class="inline-block px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-800 border border-green-200">COMPLIANT</span>';
             }
+            if (status === STATUS.PENDING) {
+                return '<span class="inline-block px-2 py-1 rounded text-xs font-bold bg-yellow-100 text-yellow-800 border border-yellow-200">PENDING</span>';
+            }
+            if (status === STATUS.DISAPPROVED) {
+                var reason = rejectionReason
+                    ? '<p class="text-xs text-red-700 mt-1 leading-snug">' + escapeHtml(rejectionReason) + '</p>'
+                    : '';
+                return '<span class="inline-block px-2 py-1 rounded text-xs font-bold bg-red-100 text-red-800 border border-red-200">REJECTED</span>' + reason;
+            }
+            return '<span class="inline-block px-2 py-1 rounded text-xs font-bold bg-red-100 text-red-800 border border-red-200">NOT FOUND</span>';
         }
 
-        // Mock Interface System for APF Fetching
-        function runApfLookup() {
-            const rawFieldNum = document.getElementById('apfNumber').value;
-            if(!rawFieldNum) return alert('Enter string value parameters first.');
-            
-            // Simulating latency lookup loops
-            document.getElementById('apiResultBox').classList.remove('hidden');
-            document.getElementById('profileName').value = "John Doe";
-            document.getElementById('profileCert').value = "Certificate C";
-            document.getElementById('step1Next').removeAttribute('disabled');
+        function reviewBadge(status) {
+            var styles = {};
+            styles[STATUS.PENDING] = 'bg-yellow-100 text-yellow-800';
+            styles[STATUS.APPROVED] = 'bg-green-100 text-green-800';
+            styles[STATUS.DISAPPROVED] = 'bg-red-100 text-red-800';
+            var label = status === STATUS.DISAPPROVED ? 'REJECTED' : (status || 'unknown');
+            return '<span class="inline-block px-2 py-0.5 rounded text-xs font-medium ' + (styles[status] || 'bg-gray-100') + '">' + escapeHtml(label) + '</span>';
         }
 
-        function validateWeightAndMove() {
-            const wtValue = document.getElementById('weightField').value;
-            if(!wtValue) return alert('Weight recording fields required.');
-            changeStep(4);
+        function initSignaturePad(canvas, onChange) {
+            var pad = new SignaturePad(canvas, { backgroundColor: 'rgb(255, 255, 255)' });
+            function resize() {
+                var ratio = Math.max(window.devicePixelRatio || 1, 1);
+                var data = pad.toData();
+                var w = canvas.offsetWidth, h = canvas.offsetHeight;
+                canvas.width = w * ratio; canvas.height = h * ratio;
+                canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+                canvas.getContext('2d').scale(ratio, ratio);
+                pad.clear();
+                if (data.length) pad.fromData(data);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            canvas.addEventListener('touchstart', function (e) { e.preventDefault(); }, { passive: false });
+            canvas.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
+            pad.addEventListener('endStroke', function () { if (onChange) onChange(); });
+            return { pad: pad, resize: resize };
         }
 
-        function clearPadCanvas() {
-            if(padInstance) padInstance.clear();
+        function rigCardHtml(index) {
+            return '<div class="rig-card border rounded p-3 bg-gray-50" data-rig-index="' + index + '">' +
+                '<div class="flex justify-between items-center mb-2"><p class="font-semibold text-sm">Rig ' + (index + 1) + '</p>' +
+                (index > 0 ? '<button type="button" class="remove-rig text-xs text-red-600">Remove</button>' : '') + '</div>' +
+                '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">' +
+                '<div><label class="text-gray-700">Main Canopy Type</label><input required data-field="main_canopy_type" class="w-full border rounded p-1.5 mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Main Canopy Size</label><input required data-field="main_canopy_size" class="w-full border rounded p-1.5 mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Reserve Type</label><input required data-field="reserve_type" class="w-full border rounded p-1.5 mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Reserve Size</label><input required data-field="reserve_size" class="w-full border rounded p-1.5 mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Reserve Due Date</label><input required type="date" data-field="reserve_due_date" class="w-full border rounded p-1.5 mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Container Type</label><input required data-field="container_type" class="w-full border rounded p-1.5 mt-0.5"></div>' +
+                '</div></div>';
         }
 
-        function handleFormSubmit(e) {
+        function rigPhotosHtml(index) {
+            return '<div class="rig-photos border rounded p-3" data-rig-index="' + index + '">' +
+                '<p class="text-sm font-semibold mb-2">Rig ' + (index + 1) + ' Photos</p>' +
+                '<div class="space-y-2 text-sm">' +
+                '<div><label class="text-gray-700">Main Canopy Approval</label><input type="file" accept="image/*" data-photo-category="main_canopy_approval" class="photo-input w-full text-xs mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Reserve Card</label><input type="file" accept="image/*" data-photo-category="reserve_card" class="photo-input w-full text-xs mt-0.5"></div>' +
+                '<div><label class="text-gray-700">Rig Photos (optional, multiple)</label><input type="file" accept="image/*" multiple data-photo-category="rig_photo" class="photo-input w-full text-xs mt-0.5"></div>' +
+                '</div></div>';
+        }
+
+        function reindexRigs() {
+            els.rigsContainer.querySelectorAll('.rig-card').forEach(function (card, i) {
+                card.setAttribute('data-rig-index', i);
+                card.querySelector('p.font-semibold').textContent = 'Rig ' + (i + 1);
+            });
+            els.rigPhotosContainer.innerHTML = '';
+            var count = els.rigsContainer.querySelectorAll('.rig-card').length;
+            for (var i = 0; i < count; i++) els.rigPhotosContainer.insertAdjacentHTML('beforeend', rigPhotosHtml(i));
+            els.rigPhotosContainer.querySelectorAll('.photo-input').forEach(function (inp) {
+                inp._compressedPhotos = [];
+                inp.addEventListener('change', handlePhotoInputChange);
+            });
+            document.getElementById('addRigBtn').classList.toggle('hidden', count >= MAX_RIGS);
+            updatePhotoCount();
+        }
+
+        function setPhotoCompressStatus(message, visible) {
+            els.photoCompressStatus.textContent = message || '';
+            els.photoCompressStatus.classList.toggle('hidden', !visible);
+        }
+
+        function compressImageFile(file) {
+            return new Promise(function (resolve, reject) {
+                if (!file.type || file.type.indexOf('image/') !== 0) {
+                    reject(new Error('Not an image'));
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function (ev) {
+                    var img = new Image();
+                    img.onload = function () {
+                        var w = img.naturalWidth;
+                        var h = img.naturalHeight;
+                        if (!w || !h) {
+                            reject(new Error('Invalid image dimensions'));
+                            return;
+                        }
+                        var scale = Math.min(1, PHOTO_MAX_DIM / Math.max(w, h));
+                        var cw = Math.round(w * scale);
+                        var ch = Math.round(h * scale);
+                        var canvas = document.createElement('canvas');
+                        canvas.width = cw;
+                        canvas.height = ch;
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, cw, ch);
+                        canvas.toBlob(function (blob) {
+                            if (!blob) {
+                                reject(new Error('Compression failed'));
+                                return;
+                            }
+                            var baseName = (file.name.replace(/\.[^.]+$/, '') || 'photo').replace(/[^a-zA-Z0-9_-]/g, '_');
+                            resolve(new File([blob], baseName + '.jpg', { type: 'image/jpeg', lastModified: Date.now() }));
+                        }, 'image/jpeg', PHOTO_JPEG_QUALITY);
+                    };
+                    img.onerror = function () { reject(new Error('Could not load image')); };
+                    img.src = ev.target.result;
+                };
+                reader.onerror = function () { reject(new Error('Could not read file')); };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function handlePhotoInputChange(e) {
+            var input = e.target;
+            var block = input.closest('.rig-photos');
+            if (!block) return;
+            var rigIndex = parseInt(block.getAttribute('data-rig-index'), 10);
+            var category = input.getAttribute('data-photo-category');
+            var rawFiles = Array.prototype.slice.call(input.files || []);
+
+            if (!rawFiles.length) {
+                input._compressedPhotos = [];
+                updatePhotoCount();
+                return;
+            }
+
+            photosCompressing++;
+            input.disabled = true;
+            setPhotoCompressStatus('Compressing ' + rawFiles.length + ' photo(s)…', true);
+
+            Promise.all(rawFiles.map(compressImageFile))
+                .then(function (compressedFiles) {
+                    input._compressedPhotos = compressedFiles.map(function (file) {
+                        return { category: category, rig_index: rigIndex, file: file };
+                    });
+                    var total = collectPhotoFiles().length;
+                    var savedKb = rawFiles.reduce(function (sum, f) { return sum + f.size; }, 0);
+                    var outKb = compressedFiles.reduce(function (sum, f) { return sum + f.size; }, 0);
+                    setPhotoCompressStatus(
+                        total + ' photo(s) ready · compressed from ' + Math.round(savedKb / 1024) + ' KB to ' + Math.round(outKb / 1024) + ' KB',
+                        true
+                    );
+                    updatePhotoCount();
+                })
+                .catch(function () {
+                    input.value = '';
+                    input._compressedPhotos = [];
+                    setPhotoCompressStatus('', false);
+                    showBanner(els.formStatus, 'Photo compression failed. Please use JPEG or PNG and try again.', 'error');
+                    updatePhotoCount();
+                })
+                .finally(function () {
+                    photosCompressing--;
+                    input.disabled = false;
+                    if (photosCompressing === 0 && !collectPhotoFiles().length) {
+                        setPhotoCompressStatus('', false);
+                    }
+                });
+        }
+
+        function addRig() {
+            var count = els.rigsContainer.querySelectorAll('.rig-card').length;
+            if (count >= MAX_RIGS) return;
+            els.rigsContainer.insertAdjacentHTML('beforeend', rigCardHtml(count));
+            reindexRigs();
+        }
+
+        function collectRigs() {
+            return Array.prototype.map.call(els.rigsContainer.querySelectorAll('.rig-card'), function (card) {
+                return {
+                    main_canopy_type: card.querySelector('[data-field="main_canopy_type"]').value.trim(),
+                    main_canopy_size: card.querySelector('[data-field="main_canopy_size"]').value.trim(),
+                    reserve_type: card.querySelector('[data-field="reserve_type"]').value.trim(),
+                    reserve_size: card.querySelector('[data-field="reserve_size"]').value.trim(),
+                    reserve_due_date: card.querySelector('[data-field="reserve_due_date"]').value,
+                    container_type: card.querySelector('[data-field="container_type"]').value.trim()
+                };
+            });
+        }
+
+        function collectPhotoFiles() {
+            var files = [];
+            els.rigPhotosContainer.querySelectorAll('.photo-input').forEach(function (input) {
+                (input._compressedPhotos || []).forEach(function (item) {
+                    files.push(item);
+                });
+            });
+            return files;
+        }
+
+        function updatePhotoCount() {
+            var count = collectPhotoFiles().length;
+            els.photoCountLabel.textContent = count + ' / ' + MAX_PHOTOS + ' photos selected';
+            els.photoCountLabel.classList.toggle('text-red-600', count > MAX_PHOTOS);
+        }
+
+        function populateDzsoSelects(officers) {
+            var html = '<option value="">Select DZSO…</option>';
+            officers.forEach(function (o) {
+                dzsoMap[o.id] = o.name;
+                var label = o.name + (o.email ? ' (' + o.email + ')' : '');
+                html += '<option value="' + o.id + '">' + escapeHtml(label) + '</option>';
+            });
+            els.dzsoSelect.innerHTML = html;
+            els.adminDzsoSelect.innerHTML = html;
+        }
+
+        function loadDzsos() {
+            if (configMissing) {
+                var msg = '<option value="">Supabase not configured</option>';
+                els.dzsoSelect.innerHTML = msg;
+                els.adminDzsoSelect.innerHTML = msg;
+                return Promise.resolve();
+            }
+            return ensureSession().then(function () {
+                return supabase.from('dzso_list').select('id, name, email').eq('is_active', true).order('name');
+            }).then(function (r) {
+                if (r.error) throw r.error;
+                if (!r.data.length) {
+                    els.dzsoSelect.innerHTML = '<option value="">No active DZSOs</option>';
+                    els.adminDzsoSelect.innerHTML = els.dzsoSelect.innerHTML;
+                    return;
+                }
+                populateDzsoSelects(r.data);
+            })
+                .catch(function () {
+                    els.dzsoSelect.innerHTML = '<option value="">Failed to load DZSOs</option>';
+                    els.adminDzsoSelect.innerHTML = els.dzsoSelect.innerHTML;
+                });
+        }
+
+        function setActiveTab(view) {
+            var tabs = { skydiver: 'tabSkydiver', admin: 'tabAdmin', manifest: 'tabManifest' };
+            var views = { skydiver: 'skydiverView', admin: 'adminView', manifest: 'manifestView' };
+            Object.keys(tabs).forEach(function (key) {
+                var active = key === view;
+                document.getElementById(views[key]).classList.toggle('hidden', !active);
+                var tab = document.getElementById(tabs[key]);
+                tab.classList.toggle('bg-red-600', active);
+                tab.classList.toggle('text-white', active);
+                tab.classList.toggle('text-gray-700', !active);
+            });
+            if (view === 'admin') loadSubmissions();
+            if (view === 'manifest' && els.manifestSearch.value.trim()) runManifestSearch();
+        }
+
+        document.getElementById('tabSkydiver').addEventListener('click', function () { setActiveTab('skydiver'); });
+        document.getElementById('tabAdmin').addEventListener('click', function () { setActiveTab('admin'); });
+        document.getElementById('tabManifest').addEventListener('click', function () { setActiveTab('manifest'); });
+        els.adminDzsoSelect.addEventListener('change', loadSubmissions);
+
+        function submissionSummary(s) {
+            var rigs = Array.isArray(s.rigs) ? s.rigs : [];
+            var rigText = rigs.map(function (r, i) {
+                return 'Rig ' + (i + 1) + ': ' + r.main_canopy_type + ' ' + r.main_canopy_size + ' / Reserve ' + r.reserve_type + ' due ' + r.reserve_due_date;
+            }).join('; ');
+            return '<p class="text-xs text-gray-600 mt-1">Weight: ' + s.verified_weight + ' kg · Jumps: ' + s.jump_count +
+                ' · Last jump: ' + formatDateOnly(s.last_jump_date) + '</p>' +
+                (rigText ? '<p class="text-xs text-gray-500 mt-1">' + escapeHtml(rigText) + '</p>' : '');
+        }
+
+        function loadSubmissions() {
+            var dzsoId = els.adminDzsoSelect.value;
+            if (!dzsoId || configMissing) {
+                els.submissionList.innerHTML = '<p class="text-sm text-gray-500 text-center py-6">Select a DZSO to load submissions.</p>';
+                return;
+            }
+            els.submissionList.innerHTML = '<p class="text-sm text-gray-500 text-center py-6">Loading…</p>';
+            ensureSession().then(function () {
+                return supabase.from('brief_submissions')
+                    .select('*')
+                    .eq('dzso_id', dzsoId).eq('brief_year', BRIEF_YEAR)
+                    .order('submitted_at', { ascending: false });
+            }).then(function (r) {
+                    if (r.error) throw r.error;
+                    if (!r.data.length) {
+                        els.submissionList.innerHTML = '<p class="text-sm text-gray-500 text-center py-6">No submissions for this DZSO in ' + BRIEF_YEAR + '.</p>';
+                        return;
+                    }
+                    els.submissionList.innerHTML = r.data.map(function (s) {
+                        var actions = '';
+                        if (s.status === STATUS.PENDING) {
+                            actions = '<button type="button" data-action="approve" data-id="' + s.id + '" class="px-3 py-1 text-xs rounded bg-green-600 text-white">Approve</button>' +
+                                '<button type="button" data-action="disapprove" data-id="' + s.id + '" class="px-3 py-1 text-xs rounded bg-red-600 text-white">Disapprove</button>';
+                        }
+                        if (s.status === STATUS.APPROVED || s.status === STATUS.DISAPPROVED) {
+                            actions += '<button type="button" data-action="pdf" data-id="' + s.id + '" class="px-3 py-1 text-xs rounded bg-gray-800 text-white">Export PDF</button>';
+                        }
+                        if (s.status === STATUS.APPROVED && s.signature_path) {
+                            actions += '<button type="button" data-action="viewsig" data-path="' + escapeHtml(s.signature_path) + '" class="px-3 py-1 text-xs rounded border">View Signature</button>';
+                        }
+                        var rejection = s.rejection_reason ? '<p class="text-xs text-red-600 mt-1">Reason: ' + escapeHtml(s.rejection_reason) + '</p>' : '';
+                        return '<div class="border rounded p-3 text-sm">' +
+                            '<div class="flex justify-between gap-2"><div>' +
+                            '<p class="font-semibold">' + escapeHtml(s.full_name) + '</p>' +
+                            '<p class="text-gray-600 text-xs">License: ' + escapeHtml(s.apf_license_number) + '</p>' +
+                            '<p class="text-gray-500 text-xs">' + escapeHtml(s.email) + ' · ' + escapeHtml(s.phone) + '</p>' +
+                            submissionSummary(s) + rejection +
+                            '</div>' + reviewBadge(s.status) + '</div>' +
+                            '<div class="flex flex-wrap gap-2 mt-3">' + actions + '</div></div>';
+                    }).join('');
+                })
+                .catch(function () {
+                    els.submissionList.innerHTML = '<p class="text-sm text-red-600 text-center py-6">Failed to load submissions.</p>';
+                });
+        }
+
+        function openSignedUrl(bucket, path) {
+            return supabase.storage.from(bucket).createSignedUrl(path, 300).then(function (r) {
+                if (r.error) throw r.error;
+                window.open(r.data.signedUrl, '_blank', 'noopener');
+            });
+        }
+
+        els.submissionList.addEventListener('click', function (e) {
+            var btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            var action = btn.getAttribute('data-action');
+            var id = btn.getAttribute('data-id');
+            if (action === 'approve') {
+                pendingApproveId = id;
+                ensureSession().then(function () {
+                    return supabase.from('brief_submissions').select('full_name, apf_license_number, verified_weight').eq('id', id).single();
+                }).then(function (r) {
+                        document.getElementById('approveSummary').textContent =
+                            'Approving brief for ' + r.data.full_name + ' (License ' + r.data.apf_license_number + ', ' + r.data.verified_weight + ' kg). Complete all validations and sign below.';
+                        ['valWeight', 'valEquipment', 'valCredentials'].forEach(function (cid) { document.getElementById(cid).checked = false; });
+                        dzsoSignaturePad.clear();
+                        updateApproveState();
+                        dzsoSig.resize();
+                        document.getElementById('approveModal').classList.remove('hidden');
+                    });
+            } else if (action === 'disapprove') {
+                pendingDisapproveId = id;
+                document.getElementById('rejectionReason').value = '';
+                document.getElementById('disapproveModal').classList.remove('hidden');
+            } else if (action === 'pdf') {
+                exportSubmissionPdf(id);
+            } else if (action === 'viewsig') {
+                openSignedUrl('signatures', btn.getAttribute('data-path')).catch(function () {
+                    showBanner(els.adminStatus, 'Could not open signature.', 'error');
+                });
+            }
+        });
+
+        function updateApproveState() {
+            var ok = document.getElementById('valWeight').checked &&
+                document.getElementById('valEquipment').checked &&
+                document.getElementById('valCredentials').checked &&
+                dzsoSignaturePad && !dzsoSignaturePad.isEmpty();
+            document.getElementById('confirmApprove').disabled = !ok;
+        }
+
+        ['valWeight', 'valEquipment', 'valCredentials'].forEach(function (id) {
+            document.getElementById(id).addEventListener('change', updateApproveState);
+        });
+
+        document.getElementById('cancelDisapprove').addEventListener('click', function () {
+            pendingDisapproveId = null;
+            document.getElementById('disapproveModal').classList.add('hidden');
+        });
+
+        document.getElementById('confirmDisapprove').addEventListener('click', function () {
+            var reason = document.getElementById('rejectionReason').value.trim();
+            if (!reason || !pendingDisapproveId) return;
+            var id = pendingDisapproveId;
+            pendingDisapproveId = null;
+            document.getElementById('disapproveModal').classList.add('hidden');
+            reviewSubmission(id, STATUS.DISAPPROVED, { rejection_reason: reason });
+        });
+
+        document.getElementById('cancelApprove').addEventListener('click', function () {
+            pendingApproveId = null;
+            document.getElementById('approveModal').classList.add('hidden');
+        });
+
+        document.getElementById('confirmApprove').addEventListener('click', function () {
+            if (!pendingApproveId || document.getElementById('confirmApprove').disabled) return;
+            var id = pendingApproveId;
+            var dzsoSigPath = BRIEF_YEAR + '/' + id + '/dzso-signature.png';
+            var blob = dataURLToBlob(dzsoSignaturePad.toDataURL('image/png'));
+            document.getElementById('confirmApprove').disabled = true;
+            showBanner(els.adminStatus, 'Saving approval…', 'info');
+
+            ensureSession().then(function () {
+                return supabase.storage.from('signatures').upload(dzsoSigPath, blob, { contentType: 'image/png', upsert: true });
+            }).then(function (up) {
+                    if (up.error) throw up.error;
+                    return reviewSubmission(id, STATUS.APPROVED, {
+                        dzso_signature_path: dzsoSigPath,
+                        dzso_validation_weight: true,
+                        dzso_validation_equipment: true,
+                        dzso_validation_credentials: true
+                    });
+                })
+                .then(function () {
+                    pendingApproveId = null;
+                    document.getElementById('approveModal').classList.add('hidden');
+                })
+                .catch(function () {
+                    showBanner(els.adminStatus, 'Approval failed. Please try again.', 'error');
+                })
+                .finally(function () { updateApproveState(); });
+        });
+
+        function reviewSubmission(id, status, extra) {
+            if (status === 'rejected') {
+                status = STATUS.DISAPPROVED;
+            }
+            if (status !== STATUS.APPROVED && status !== STATUS.DISAPPROVED) {
+                return Promise.reject(new Error('Invalid review status'));
+            }
+            var resolvedStatus = status === STATUS.DISAPPROVED ? STATUS.DISAPPROVED : STATUS.APPROVED;
+            var payload = Object.assign({
+                status: resolvedStatus,
+                reviewed_at: new Date().toISOString()
+            }, extra || {});
+            if (resolvedStatus === STATUS.DISAPPROVED) {
+                payload.dzso_validation_weight = false;
+                payload.dzso_validation_equipment = false;
+                payload.dzso_validation_credentials = false;
+                payload.dzso_signature_path = null;
+            }
+            return supabase.from('brief_submissions').update(payload).eq('id', id).then(function (r) {
+                if (r.error) throw r.error;
+                showBanner(els.adminStatus, 'Submission ' + resolvedStatus + '.', 'success');
+                loadSubmissions();
+            });
+        }
+
+        function runManifestSearch() {
+            var q = els.manifestSearch.value.trim();
+            var year = parseInt(els.manifestYear.value, 10) || BRIEF_YEAR;
+            if (!q || configMissing) {
+                els.manifestResults.innerHTML = '<p class="text-sm text-gray-500 text-center py-6">Type to search manifest records.</p>';
+                return;
+            }
+            els.manifestResults.innerHTML = '<p class="text-sm text-gray-500 text-center py-6">Searching…</p>';
+            var pattern = '%' + q.replace(/[%_]/g, '') + '%';
+            ensureSession().then(function () {
+                return supabase.from('brief_submissions')
+                    .select('id, full_name, apf_license_number, status, rejection_reason, signature_path, brief_year, submitted_at, verified_weight')
+                    .eq('brief_year', year)
+                    .or('apf_license_number.ilike.' + pattern + ',full_name.ilike.' + pattern)
+                    .order('full_name');
+            }).then(function (r) {
+                    if (r.error) throw r.error;
+                    if (!r.data.length) {
+                        els.manifestResults.innerHTML = '<div class="border rounded p-4 text-sm">' +
+                            '<div class="flex justify-between items-start gap-2">' +
+                            '<div><p class="font-semibold">No record for "' + escapeHtml(q) + '"</p>' +
+                            '<p class="text-xs text-gray-500">Brief year ' + year + '</p></div>' +
+                            manifestBadge('not_found') + '</div></div>';
+                        return;
+                    }
+                    els.manifestResults.innerHTML = r.data.map(function (s) {
+                        var sigLink = s.status === STATUS.APPROVED && s.signature_path
+                            ? '<button type="button" class="manifest-sig text-xs text-red-600 underline mt-2" data-path="' + escapeHtml(s.signature_path) + '">View approved signature PNG</button>'
+                            : '';
+                        return '<div class="border rounded p-4 text-sm">' +
+                            '<div class="flex justify-between items-start gap-2">' +
+                            '<div><p class="font-semibold">' + escapeHtml(s.full_name) + '</p>' +
+                            '<p class="text-xs text-gray-600">License: ' + escapeHtml(s.apf_license_number) + '</p>' +
+                            '<p class="text-xs text-gray-500">' + s.verified_weight + ' kg · Submitted ' + formatDate(s.submitted_at) + '</p>' +
+                            sigLink + '</div>' +
+                            '<div class="text-right">' + manifestBadge(s.status, s.rejection_reason) + '</div>' +
+                            '</div></div>';
+                    }).join('');
+                })
+                .catch(function () {
+                    els.manifestResults.innerHTML = '<p class="text-sm text-red-600 text-center py-6">Search failed.</p>';
+                });
+        }
+
+        els.manifestSearch.addEventListener('input', function () {
+            clearTimeout(manifestTimer);
+            manifestTimer = setTimeout(runManifestSearch, 300);
+        });
+        els.manifestYear.addEventListener('change', runManifestSearch);
+
+        els.manifestResults.addEventListener('click', function (e) {
+            var btn = e.target.closest('.manifest-sig');
+            if (!btn) return;
+            openSignedUrl('signatures', btn.getAttribute('data-path')).catch(function () {
+                els.manifestResults.insertAdjacentHTML('afterbegin', '<p class="text-sm text-red-600 mb-2">Could not open signature.</p>');
+            });
+        });
+
+        function waitForSignatureImage(imgEl) {
+            return new Promise(function (resolve, reject) {
+                function verify() {
+                    if (!imgEl.naturalWidth) return reject(new Error('blank'));
+                    void imgEl.offsetHeight;
+                    requestAnimationFrame(function () { requestAnimationFrame(resolve); });
+                }
+                if (imgEl.complete) verify();
+                else { imgEl.onload = verify; imgEl.onerror = function () { reject(new Error('load fail')); }; }
+            });
+        }
+
+        function exportSubmissionPdf(id) {
+            showBanner(els.adminStatus, 'Preparing PDF…', 'info');
+            ensureSession().then(function () {
+                return supabase.from('brief_submissions').select('*').eq('id', id).single();
+            }).then(function (r) {
+                    if (r.error) throw r.error;
+                    return supabase.storage.from('signatures').createSignedUrl(r.data.signature_path, 120)
+                        .then(function (u) {
+                            if (u.error) throw u.error;
+                            return { submission: r.data, signatureUrl: u.data.signedUrl };
+                        });
+                })
+                .then(function (data) {
+                    var s = data.submission;
+                    document.getElementById('pdfYear').textContent = 'Brief Year ' + s.brief_year;
+                    document.getElementById('pdfName').textContent = s.full_name;
+                    document.getElementById('pdfLicense').textContent = s.apf_license_number;
+                    document.getElementById('pdfDzso').textContent = dzsoMap[s.dzso_id] || '—';
+                    document.getElementById('pdfWeight').textContent = s.verified_weight;
+                    document.getElementById('pdfSubmitted').textContent = formatDate(s.submitted_at);
+                    document.getElementById('pdfStatus').textContent = s.status;
+                    var rejRow = document.getElementById('pdfRejectionRow');
+                    if (s.rejection_reason) {
+                        rejRow.classList.remove('hidden');
+                        document.getElementById('pdfRejection').textContent = s.rejection_reason;
+                    } else rejRow.classList.add('hidden');
+                    var img = document.getElementById('pdfSignature');
+                    img.removeAttribute('src');
+                    img.src = data.signatureUrl;
+                    return waitForSignatureImage(img).then(function () {
+                        return html2pdf().set({
+                            margin: 10,
+                            filename: 'dzbrief-' + s.apf_license_number + '-' + s.brief_year + '.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2, useCORS: true, logging: false },
+                            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                        }).from(document.getElementById('pdfReceipt')).save();
+                    });
+                })
+                .then(function () { showBanner(els.adminStatus, 'PDF exported.', 'success'); })
+                .catch(function () { showBanner(els.adminStatus, 'PDF export failed.', 'error'); });
+        }
+
+        // Jumper signature pad
+        var jumperSig = initSignaturePad(document.getElementById('signature-canvas'));
+        var signaturePad = jumperSig.pad;
+        document.getElementById('clear').addEventListener('click', function () { signaturePad.clear(); });
+
+        // DZSO signature pad
+        var dzsoSig = initSignaturePad(document.getElementById('dzso-signature-canvas'), updateApproveState);
+        dzsoSignaturePad = dzsoSig.pad;
+        document.getElementById('clearDzsoSig').addEventListener('click', function () {
+            dzsoSignaturePad.clear();
+            updateApproveState();
+        });
+
+        // Rigs UI
+        els.rigsContainer.innerHTML = rigCardHtml(0);
+        reindexRigs();
+        document.getElementById('addRigBtn').addEventListener('click', addRig);
+        els.rigsContainer.addEventListener('click', function (e) {
+            if (!e.target.classList.contains('remove-rig')) return;
+            e.target.closest('.rig-card').remove();
+            reindexRigs();
+        });
+
+        function uploadRigPhotos(submissionId, photoFiles) {
+            if (!photoFiles.length) return Promise.resolve([]);
+            var uploads = photoFiles.map(function (item, idx) {
+                var path = BRIEF_YEAR + '/' + submissionId + '/rig' + item.rig_index + '-' + item.category + '-' + idx + '.jpg';
+                return supabase.storage.from('rig_photos').upload(path, item.file, { contentType: 'image/jpeg', upsert: false })
+                    .then(function (r) {
+                        if (r.error) throw r.error;
+                        return { category: item.category, rig_index: item.rig_index, path: path };
+                    });
+            });
+            return Promise.all(uploads);
+        }
+
+        function rollbackUploads(paths, bucket) {
+            if (!paths.length) return Promise.resolve();
+            return supabase.storage.from(bucket).remove(paths);
+        }
+
+        els.form.addEventListener('submit', function (e) {
             e.preventDefault();
-            if (padInstance && padInstance.isEmpty()) {
-                return alert("Please draw your validation signature trace on the canvas before submitting.");
+            if (collectPhotoFiles().length > MAX_PHOTOS) {
+                els.submitBtn.disabled = false;
+                showBanner(els.formStatus, 'Maximum ' + MAX_PHOTOS + ' photos allowed per submission.', 'error');
+                return;
             }
-            alert("Success! Local submission complete. Compiling dynamic data matrices for localized routing to Safety Officer systems.");
+            if (configMissing) return;
+            if (!sessionReady) {
+                showBanner(els.formStatus, 'Establishing secure session…', 'info');
+            }
+            ensureSession().then(function () {
+                return submitBriefing();
+            }).catch(function () {
+                showBanner(els.formStatus, 'Authentication failed. Enable Anonymous sign-ins in Supabase Auth.', 'error');
+            });
+        });
+
+        function submitBriefing() {
+            if (!els.dzsoSelect.value) {
+                showBanner(els.formStatus, 'Please select the active DZSO.', 'error');
+                return;
+            }
+            if (signaturePad.isEmpty()) {
+                showBanner(els.formStatus, 'Please provide your signature.', 'error');
+                return;
+            }
+            if (photosCompressing > 0) {
+                showBanner(els.formStatus, 'Please wait — photos are still being compressed.', 'error');
+                return;
+            }
+            var photoFiles = collectPhotoFiles();
+            if (photoFiles.length > MAX_PHOTOS) {
+                els.submitBtn.disabled = false;
+                showBanner(els.formStatus, 'Maximum ' + MAX_PHOTOS + ' photos allowed per submission.', 'error');
+                return;
+            }
+
+            var submissionId = crypto.randomUUID();
+            var signaturePath = BRIEF_YEAR + '/' + submissionId + '/jumper-signature.png';
+            var signatureBlob = dataURLToBlob(signaturePad.toDataURL('image/png'));
+            var uploadedPaths = [];
+
+            els.submitBtn.disabled = true;
+            els.submitBtn.textContent = photoFiles.length ? 'Uploading compressed photos…' : 'Submitting…';
+            els.formStatus.classList.add('hidden');
+
+            supabase.storage.from('signatures').upload(signaturePath, signatureBlob, { contentType: 'image/png', upsert: false })
+                .then(function (up) {
+                    if (up.error) throw up.error;
+                    uploadedPaths.push(signaturePath);
+                    return uploadRigPhotos(submissionId, photoFiles);
+                })
+                .then(function (rigPhotoMeta) {
+                    rigPhotoMeta.forEach(function (p) { uploadedPaths.push(p.path); });
+                    return supabase.from('brief_submissions').insert({
+                        id: submissionId,
+                        brief_year: BRIEF_YEAR,
+                        full_name: document.getElementById('fullName').value.trim(),
+                        apf_license_number: document.getElementById('licenseNumber').value.trim(),
+                        dzso_id: els.dzsoSelect.value,
+                        address: document.getElementById('address').value.trim(),
+                        phone: document.getElementById('phone').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        date_of_birth: document.getElementById('dateOfBirth').value,
+                        next_of_kin_name: document.getElementById('nextOfKinName').value.trim(),
+                        next_of_kin_phone: document.getElementById('nextOfKinPhone').value.trim(),
+                        jump_count: parseInt(document.getElementById('jumpCount').value, 10),
+                        last_jump_date: document.getElementById('lastJumpDate').value,
+                        verified_weight: parseFloat(document.getElementById('verifiedWeight').value),
+                        rigs: collectRigs(),
+                        rig_photos: rigPhotoMeta,
+                        agreed_to_rules: document.getElementById('agreeRules').checked,
+                        signature_path: signaturePath,
+                        status: STATUS.PENDING
+                    });
+                })
+                .then(function (ins) {
+                    if (ins.error) throw ins.error;
+                    els.form.reset();
+                    signaturePad.clear();
+                    els.rigsContainer.innerHTML = rigCardHtml(0);
+                    reindexRigs();
+                    setPhotoCompressStatus('', false);
+                    loadDzsos();
+                    showBanner(els.formStatus, 'Briefing submitted for DZSO review.', 'success');
+                })
+                .catch(function (err) {
+                    var msg = 'Submission failed. Please try again.';
+                    if (err && err.code === '23505') msg = 'A briefing for this license already exists for ' + BRIEF_YEAR + '.';
+                    showBanner(els.formStatus, msg, 'error');
+                    var sigPaths = uploadedPaths.filter(function (p) { return p.indexOf('jumper-signature') !== -1; });
+                    var rigPaths = uploadedPaths.filter(function (p) { return p.indexOf('jumper-signature') === -1; });
+                    rollbackUploads(sigPaths, 'signatures');
+                    rollbackUploads(rigPaths, 'rig_photos');
+                })
+                .finally(function () {
+                    els.submitBtn.disabled = false;
+                    els.submitBtn.textContent = 'Submit Briefing';
+                });
         }
+
+        if (configMissing) {
+            els.submitBtn.disabled = true;
+            showBanner(els.formStatus, 'Supabase not configured. Copy config.example.js to config.js.', 'error');
+        } else {
+            ensureSession()
+                .then(function () { return loadDzsos(); })
+                .catch(function () {
+                    els.submitBtn.disabled = true;
+                    showBanner(els.formStatus, 'Authentication failed. Enable Anonymous sign-ins in Supabase Auth.', 'error');
+                });
+        }
+    });
     </script>
 </body>
 </html>
