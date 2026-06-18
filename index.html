@@ -32,55 +32,92 @@
                 <fieldset class="space-y-3 border-b pb-4">
                     <legend class="text-sm font-bold text-gray-800">Personal Details</legend>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required class="mt-1 w-full border rounded p-2">
+                        </div>
                         <div class="sm:col-span-2">
-                            <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
-                            <input type="text" id="fullName" required class="mt-1 w-full border rounded p-2">
+                            <label for="apfCertificate" class="block text-sm font-medium text-gray-700">APF CERTIFICATE</label>
+                            <select id="apfCertificate" name="apfCertificate" required class="mt-1 w-full border rounded p-2 bg-white">
+                                <option value="" disabled selected>Select Certificate...</option>
+                                <option value="STUDENT">STUDENT</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="PILOT">PILOT</option>
+                            </select>
                         </div>
                         <div>
                             <label for="licenseNumber" class="block text-sm font-medium text-gray-700">APF License Number</label>
-                            <input type="text" id="licenseNumber" required class="mt-1 w-full border rounded p-2">
+                            <input type="text" id="licenseNumber" name="licenseNumber" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
                             <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
-                            <input type="date" id="dateOfBirth" required class="mt-1 w-full border rounded p-2">
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                            <input type="text" id="address" required class="mt-1 w-full border rounded p-2">
+                            <label for="streetAddress" class="block text-sm font-medium text-gray-700">Street Address</label>
+                            <input type="text" id="streetAddress" name="streetAddress" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="cityTown" class="block text-sm font-medium text-gray-700">City / Town</label>
+                            <input type="text" id="cityTown" name="cityTown" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="stateRegion" class="block text-sm font-medium text-gray-700">State / Region</label>
+                            <input type="text" id="stateRegion" name="stateRegion" placeholder="e.g., QLD, NSW, VIC" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="postcode" class="block text-sm font-medium text-gray-700">Postcode</label>
+                            <input type="text" id="postcode" name="postcode" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div>
+                            <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                            <input type="text" id="country" name="country" value="Australia" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                            <input type="tel" id="phone" required class="mt-1 w-full border rounded p-2">
+                            <input type="tel" id="phone" name="phone" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" required class="mt-1 w-full border rounded p-2">
+                            <input type="email" id="email" name="email" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
                             <label for="nextOfKinName" class="block text-sm font-medium text-gray-700">Next of Kin — Name</label>
-                            <input type="text" id="nextOfKinName" required class="mt-1 w-full border rounded p-2">
+                            <input type="text" id="nextOfKinName" name="nextOfKinName" required class="mt-1 w-full border rounded p-2">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="nokRelationship" class="block text-sm font-medium text-gray-700">Next of Kin Relationship</label>
+                            <input type="text" id="nokRelationship" name="nokRelationship" placeholder="e.g., Spouse, Parent, Friend" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
                             <label for="nextOfKinPhone" class="block text-sm font-medium text-gray-700">Next of Kin — Phone</label>
-                            <input type="tel" id="nextOfKinPhone" required class="mt-1 w-full border rounded p-2">
+                            <input type="tel" id="nextOfKinPhone" name="nextOfKinPhone" required class="mt-1 w-full border rounded p-2">
                         </div>
                     </div>
                 </fieldset>
 
                 <fieldset class="space-y-3 border-b pb-4">
-                    <legend class="text-sm font-bold text-gray-800">Jump Experience</legend>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                             <label for="jumpCount" class="block text-sm font-medium text-gray-700">Jump Count</label>
-                            <input type="number" id="jumpCount" min="0" required class="mt-1 w-full border rounded p-2">
+                            <input type="number" id="jumpCount" name="jumpCount" min="0" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
                             <label for="lastJumpDate" class="block text-sm font-medium text-gray-700">Last Jump Date</label>
-                            <input type="date" id="lastJumpDate" required class="mt-1 w-full border rounded p-2">
+                            <input type="date" id="lastJumpDate" name="lastJumpDate" required class="mt-1 w-full border rounded p-2">
                         </div>
                         <div>
-                            <label for="verifiedWeight" class="block text-sm font-medium text-gray-700">Verified Weight (kg)</label>
-                            <input type="number" id="verifiedWeight" min="1" step="0.1" required class="mt-1 w-full border rounded p-2">
+                            <label for="verifiedWeight" class="block text-sm font-medium text-gray-700">Weight on DZ scale in street clothes</label>
+                            <input type="number" id="verifiedWeight" name="verifiedWeight" min="1" step="0.1" required class="mt-1 w-full border rounded p-2">
                         </div>
                     </div>
                 </fieldset>
@@ -300,6 +337,21 @@
 
         function formatDateOnly(iso) {
             return iso ? new Date(iso + 'T00:00:00').toLocaleDateString() : '—';
+        }
+
+        function formatStructuredAddress() {
+            var parts = [
+                document.getElementById('streetAddress').value.trim(),
+                document.getElementById('cityTown').value.trim(),
+                document.getElementById('stateRegion').value.trim(),
+                document.getElementById('postcode').value.trim(),
+                document.getElementById('country').value.trim()
+            ].filter(Boolean);
+            return parts.join(', ');
+        }
+
+        function formatFullName() {
+            return document.getElementById('firstName').value.trim() + ' ' + document.getElementById('lastName').value.trim();
         }
 
         function dataURLToBlob(dataURL) {
@@ -972,14 +1024,16 @@
                     return supabase.from('brief_submissions').insert({
                         id: submissionId,
                         brief_year: BRIEF_YEAR,
-                        full_name: document.getElementById('fullName').value.trim(),
+                        full_name: formatFullName(),
                         apf_license_number: document.getElementById('licenseNumber').value.trim(),
+                        apf_certificate: document.getElementById('apfCertificate').value,
                         dzso_id: els.dzsoSelect.value,
-                        address: document.getElementById('address').value.trim(),
+                        address: formatStructuredAddress(),
                         phone: document.getElementById('phone').value.trim(),
                         email: document.getElementById('email').value.trim(),
                         date_of_birth: document.getElementById('dateOfBirth').value,
                         next_of_kin_name: document.getElementById('nextOfKinName').value.trim(),
+                        next_of_kin_relationship: document.getElementById('nokRelationship').value.trim(),
                         next_of_kin_phone: document.getElementById('nextOfKinPhone').value.trim(),
                         jump_count: parseInt(document.getElementById('jumpCount').value, 10),
                         last_jump_date: document.getElementById('lastJumpDate').value,
@@ -994,6 +1048,7 @@
                 .then(function (ins) {
                     if (ins.error) throw ins.error;
                     els.form.reset();
+                    document.getElementById('country').value = 'Australia';
                     signaturePad.clear();
                     els.rigsContainer.innerHTML = rigCardHtml(0);
                     reindexRigs();
